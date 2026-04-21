@@ -1,0 +1,5 @@
+{
+  "hooks": {
+    "pre-commit": "./check-backend-build.sh"
+  }
+}

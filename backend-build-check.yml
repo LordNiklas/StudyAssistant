@@ -1,0 +1,38 @@
+name: Backend Build Check
+
+on:
+  push:
+    branches: [ main, master ]
+    paths:
+      - 'backend/**'
+      - 'check-backend-build.sh'
+      - '.github/workflows/backend-build-check.yml'
+  pull_request:
+    branches: [ main, master ]
+    paths:
+      - 'backend/**'
+      - 'check-backend-build.sh'
+      - '.github/workflows/backend-build-check.yml'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: 'backend/package-lock.json'
+    
+    - name: Install dependencies
+      run: cd backend && npm ci
+    
+    - name: Make check script executable
+      run: chmod +x ./check-backend-build.sh
+    
+    - name: Check if backend builds
+      run: ./check-backend-build.sh
